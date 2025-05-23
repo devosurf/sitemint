@@ -18,6 +18,7 @@ import { SiteConfig } from "@/types/site";
 import { scrapeAndAnalyzeWebsite } from "@/app/actions/scraper/scraperActions";
 import { saveSiteConfig } from "@/app/actions/database/siteConfigActions";
 import { toast } from "sonner";
+import { getCurrentUserWorkspaceId } from "@/lib/user";
 
 interface RecipientInfo {
   name: string;
@@ -78,7 +79,16 @@ export default function ScraperPage() {
 
     setIsLoading(true);
     try {
-      const siteConfig = await scrapeAndAnalyzeWebsite(url);
+      const workspaceId = await getCurrentUserWorkspaceId();
+      if (!workspaceId) {
+        toast.error(
+          "Could not determine your workspace. Please ensure you are logged in and have a workspace."
+        );
+        setIsLoading(false);
+        return;
+      }
+
+      const siteConfig = await scrapeAndAnalyzeWebsite(url, workspaceId);
       setScrapedData(siteConfig);
       setEditedData(siteConfig);
       setRecipient({
