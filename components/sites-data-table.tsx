@@ -54,9 +54,12 @@ interface SitesDataTableProps {
 }
 
 const handleViewSite = (subdomain: string) => {
-  window.open(`http://${subdomain}.localhost:3000`, "_blank");
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const siteUrl = `${baseUrl.replace(/^https?:\/\//, `http://${subdomain}.`)}`;
+
+  window.open(siteUrl, "_blank");
   toast.success("Opening website in a new tab", {
-    description: `Viewing ${subdomain}.localhost:3000`,
+    description: `Viewing ${siteUrl}`,
   });
 };
 

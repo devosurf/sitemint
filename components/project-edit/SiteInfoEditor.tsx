@@ -210,7 +210,15 @@ export function SiteInfoEditor({ initialData }: SiteInfoEditorProps) {
                 </span>
                 {initialData.subdomain ? (
                   <Link
-                    href={`http://${initialData.subdomain}.localhost:3000`}
+                    href={(() => {
+                      const baseUrl =
+                        process.env.NEXT_PUBLIC_APP_URL ||
+                        "http://localhost:3000";
+                      return `${baseUrl.replace(
+                        /^https?:\/\//,
+                        `http://${initialData.subdomain}.`
+                      )}`;
+                    })()}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:underline dark:text-blue-400"
