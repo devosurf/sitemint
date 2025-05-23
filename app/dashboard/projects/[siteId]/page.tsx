@@ -20,10 +20,15 @@ interface ProjectDetailsPageProps {
 export default async function ProjectDetailsPage({
   params,
 }: ProjectDetailsPageProps) {
+  const { siteId } = await params;
   const site = await prisma.site.findUnique({
-    where: { id: params.siteId },
+    where: { id: siteId },
     include: {
-      owner: true,
+      workspace: {
+        include: {
+          owner: true,
+        },
+      },
       contact: true,
       socialMedia: true,
       hero: true,
@@ -77,7 +82,10 @@ export default async function ProjectDetailsPage({
           {/* Sidebar Column */}
           <aside className="space-y-6 lg:col-span-4">
             {/* Owner Details Card - Replaced with Editor */}
-            <OwnerInfoEditor siteId={site.id} initialData={site.owner} />
+            <OwnerInfoEditor
+              siteId={site.id}
+              initialData={site.workspace?.owner}
+            />
 
             {/* Contact Details Card - Replaced with Editor */}
             <ContactInfoEditor siteId={site.id} initialData={site.contact} />

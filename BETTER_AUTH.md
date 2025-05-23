@@ -16,6 +16,7 @@ Integrating Better Auth for authentication in the application.
 - [x] Implement Sign Out (`components/nav-user.tsx`)
 - [x] Implement Client-Side Session Management (`components/nav-user.tsx` using `useSession`)
 - [ ] Implement Server-Side Session Management
+- [ ] Associate user with workspace on sign-up (`lib/auth.ts` - done for email/pass, TODO for social)
 
 ## Future Tasks
 
@@ -30,5 +31,8 @@ Follow the Better Auth documentation to integrate authentication features.
 
 - `app/api/auth/[...all]/route.ts` - API route for Better Auth handler.
 - `lib/auth-client.ts` - Better Auth client instance.
-- `middleware.ts` - Middleware for protecting routes.
-- `lib/auth.ts` - Better Auth server configuration. 
+- `middleware.ts` - Middleware for protecting routes and handling subdomain rewrites.
+- `lib/auth.ts` - Better Auth server configuration (including hooks for workspace creation).
+- `components/auth/sign-in.tsx` - Sign-in form component.
+- `components/auth/sign-up.tsx` - Sign-up form component.
+- `components/nav-user.tsx` - Navigation component displaying user info and logout. 

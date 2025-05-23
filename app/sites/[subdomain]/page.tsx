@@ -22,7 +22,11 @@ export default async function SitePage({ params }: PageProps) {
   const site = await prisma.site.findUnique({
     where: { subdomain },
     include: {
-      owner: true,
+      workspace: {
+        include: {
+          owner: true,
+        },
+      },
       theme: true,
       contact: true,
       services: true,

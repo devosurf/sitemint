@@ -1,0 +1,49 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Feature Name Implementation
+
+Site Configuration Management & User Helper
+
+## Completed Tasks
+
+- [x] Create `getCurrentUser` helper function in `lib/user.ts` (includes `getCurrentUserId`, `getCurrentUserWorkspaceId`)
+- [x] Refactor `saveSiteConfig` in `app/actions/database/siteConfigActions.ts` to align with `schema.prisma` (associate Site with Workspace)
+
+## In Progress Tasks
+
+(No tasks currently in progress for this specific feature)
+
+## Future Tasks
+
+- [ ] (Add any future related tasks here, e.g., UI for site config management that uses this action)
+
+## Implementation Plan
+
+### `getCurrentUser` Helper
+- ✅ Created `lib/user.ts`.
+- ✅ Function uses `auth.api.getSession()` from `better-auth`.
+- ✅ Retrieves session using `next/headers`.
+- ✅ Returns the full `User` object from the database (fetched via session user ID) or `null`.
+- ✅ Handles potential errors gracefully.
+- ✅ Added `getCurrentUserId` and `getCurrentUserWorkspaceId` for convenience.
+
+### Refactor `saveSiteConfig`
+- ✅ Modified `saveSiteConfig` to use `getCurrentUserWorkspaceId`.
+- ✅ Enforces that user must have a `workspaceId`.
+- ✅ Updated Prisma `upsert` logic:
+    - ✅ Removed direct `owner` relations for `Site`.
+    - ✅ Added `workspace: { connect: { id: workspaceId } }` to link `Site` to `Workspace`.
+- ✅ Corrected `include` statements (uses `workspace: true`).
+- ✅ Updated logging to show `workspaceId`.
+- ✅ Resolved all linter errors in `siteConfigActions.ts`.
+- ✅ Conditionally builds create/update data for optional relations to prevent Prisma errors.
+
+### Relevant Files
+
+- `lib/user.ts` - ✅ For `getCurrentUser` helper.
+- `app/actions/database/siteConfigActions.ts` - ✅ Main file for site configuration saving logic.
+- `prisma/schema.prisma` - Source of truth for database models.
+- `task-list.mdc` - ✅ This task tracking file.
