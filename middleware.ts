@@ -1,12 +1,12 @@
 import { betterFetch } from "@better-fetch/fetch";
-import type { auth as authConfigType } from "@/lib/auth"; // Using an alias for clarity
+import type { auth as authConfigType } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 
-type Session = typeof authConfigType.$Infer.Session; // Ensure this type path is correct from your auth setup
+type Session = typeof authConfigType.$Infer.Session;
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const urlClone = request.nextUrl.clone(); // Use a clone for potential rewrites
+  const urlClone = request.nextUrl.clone();
 
   // --- [1] Authentication for /dashboard paths ---
   if (pathname.startsWith("/dashboard")) {
@@ -33,9 +33,9 @@ export async function middleware(request: NextRequest) {
   // and NextResponse.next() was called (though the above block returns, effectively making this for non-/dashboard paths).
 
   const hostname = request.headers.get("host") || "";
-  // Adjust sitemint.vercel.app to your actual production root domain if different.
+  // Adjust sitemint.tech to your actual production root domain if different.
   const isRootDomain =
-    hostname === "sitemint.vercel.app" || hostname.startsWith("localhost");
+    hostname === "sitemint.tech" || hostname.startsWith("localhost");
 
   if (!isRootDomain) {
     const parts = hostname.split(".");
