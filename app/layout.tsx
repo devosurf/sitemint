@@ -1,6 +1,7 @@
 import { constructMetadata } from "@/lib/utils";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@/components/analytics";
 
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -35,6 +36,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
       <body className="antialiased">
+        <Analytics />
         <Toaster />
         <ThemeProvider
           attribute="class"
