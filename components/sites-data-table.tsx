@@ -35,7 +35,7 @@ import {
 } from "@tanstack/react-table";
 import type {
   Site,
-  Owner,
+  User,
   Contact,
   SocialMedia,
 } from "@/generated/prisma/client";
@@ -44,7 +44,7 @@ import { deploySiteToVercel } from "@/app/actions/deploy/deploymentActions";
 import Link from "next/link";
 
 interface SiteWithRelations extends Site {
-  owner: Owner | null;
+  owner: User | null;
   contact: Contact | null;
   socialMedia: SocialMedia | null;
 }

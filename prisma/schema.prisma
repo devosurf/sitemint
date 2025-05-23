@@ -14,15 +14,71 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Core User and Workspace Models
+// -----------------------------------------------------------------------------
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownedWorkspace Workspace? @relation("OwnedWorkspace") // Workspace this user owns
+
+  // Link to the single workspace this user belongs to (as owner or member)
+  workspaceId     String?
+  workspace       Workspace? @relation("WorkspaceMembers", fields: [workspaceId], references: [id])
+  roleInWorkspace Role? // User's role in that workspace
+  emailVerified   Boolean
+  image           String?
+  sessions        Session[]
+  accounts        Account[]
+
+  @@map("user")
+}
+
+model Workspace {
+  id               String   @id @default(cuid())
+  name             String
+  promptUsageCount Int      @default(0) // Example of a workspace-specific counter
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  ownerId String @unique // ID of the User who owns this workspace
+  owner   User   @relation("OwnedWorkspace", fields: [ownerId], references: [id])
+
+  users User[] @relation("WorkspaceMembers") // All users belonging to this workspace
+  sites Site[] // Sites belonging to this workspace
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+// Site and Related Content Models
+// -----------------------------------------------------------------------------
+
 model Site {
   id          String @id @default(cuid())
   subdomain   String @unique
   name        String
   description String
 
-  ownerId String? @unique
-  owner   Owner?  @relation(fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  githubRepoUrl    String?
+  vercelProjectUrl String?
+
+  // Relation to Workspace
+  workspaceId String?
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id])
+
+  // Site Content Relations
   themeId String? @unique
   theme   Theme?  @relation(fields: [themeId], references: [id])
 
@@ -35,20 +91,7 @@ model Site {
   heroId String? @unique
   hero   Hero?   @relation(fields: [heroId], references: [id])
 
-  services  Service[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  githubRepoUrl    String?
-  vercelProjectUrl String?
-}
-
-model Owner {
-  id    String  @id @default(cuid())
-  name  String
-  email String
-  phone String?
-  site  Site?
+  services Service[]
 }
 
 model Theme {
@@ -94,4 +137,49 @@ model Hero {
   ctaPrimary   String?
   ctaSecondary String?
   site         Site?
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
 }

@@ -4,6 +4,7 @@ import OpenAI from "openai";
 import { SiteConfig } from "@/types/site";
 import { z } from "zod";
 import { zodResponseFormat } from "openai/helpers/zod";
+import { prisma } from "@/lib/prisma";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -70,9 +71,21 @@ const SiteConfigSchema = z.object({
 });
 
 export async function scrapeAndAnalyzeWebsite(
-  url: string
+  url: string,
+  workspaceId: string
 ): Promise<SiteConfig> {
   console.log("🔄 Starting website analysis process...");
+
+  // Add a check for workspaceId
+  if (!workspaceId) {
+    console.error(
+      "❌ Error: workspaceId is required for scrapeAndAnalyzeWebsite."
+    );
+    throw new Error(
+      "workspaceId is required to analyze website and update prompt count."
+    );
+  }
+
   try {
     // 1. Scrape the website
     const html = await scrapeWebsite(url);
@@ -135,10 +148,28 @@ export async function scrapeAndAnalyzeWebsite(
     // Ensure we use our generated subdomain
     siteConfig.subdomain = subdomain;
 
+    // Increment promptUsageCount for the workspace
+    try {
+      await prisma.workspace.update({
+        where: { id: workspaceId },
+        data: { promptUsageCount: { increment: 1 } },
+      });
+      console.log(
+        `✅ Incremented promptUsageCount for workspace: ${workspaceId}`
+      );
+    } catch (dbError) {
+      console.error(
+        `❌ Error updating promptUsageCount for workspace ${workspaceId}:`,
+        dbError
+      );
+      // Decide if this error should prevent returning siteConfig
+      // For now, we'll log it and continue
+    }
+
     console.log("✅ Successfully created site configuration:", {
       name: siteConfig.name,
       subdomain: siteConfig.subdomain,
-      servicesCount: siteConfig.services.length,
+      servicesCount: siteConfig.services?.length || 0,
     });
 
     return siteConfig;

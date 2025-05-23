@@ -27,7 +27,11 @@ export async function deploySiteToVercel(siteId: string) {
   const site = await prisma.site.findUnique({
     where: { id: siteId },
     include: {
-      owner: true,
+      workspace: {
+        include: {
+          owner: true,
+        },
+      },
       theme: true,
       contact: true,
       services: true,
