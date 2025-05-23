@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { getCurrentUserWorkspaceId } from "@/lib/user";
+import { redirect } from "next/navigation";
 
 export async function getWorkspaceDetails(workspaceId: string) {
   if (!workspaceId) {
@@ -31,9 +32,9 @@ export async function getWorkspaceDetails(workspaceId: string) {
 export async function getCurrentUserWorkspaceDetails() {
   const workspaceId = await getCurrentUserWorkspaceId();
   if (!workspaceId) {
-    // This case should ideally be handled by getCurrentUserWorkspaceId throwing an error
-    // or by UI preventing action if workspaceId is not available.
-    throw new Error("User is not associated with a workspace.");
+    // If no workspaceId, redirect to workspace creation page
+    redirect("/workspaces/create");
   }
+  // If workspaceId exists, proceed to get details
   return getWorkspaceDetails(workspaceId);
 }

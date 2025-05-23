@@ -224,7 +224,6 @@ export default function SignIn() {
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?
-            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a href="/sign-up" className="underline ml-1">
               Sign up
             </a>
