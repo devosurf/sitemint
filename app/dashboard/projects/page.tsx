@@ -1,9 +1,22 @@
 import { SitesDataTable } from "@/components/sites-data-table";
 import { prisma } from "@/lib/prisma";
 import { EmptyStateProjects } from "@/components/empty-state-projects";
+import { getCurrentUserWorkspaceId } from "@/lib/user";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
+  // Get the current user's workspace ID
+  const workspaceId = await getCurrentUserWorkspaceId();
+
+  if (!workspaceId) {
+    // If user doesn't have a workspace, redirect to workspace creation
+    redirect("/workspaces/create");
+  }
+
   const sitesFromDb = await prisma.site.findMany({
+    where: {
+      workspaceId: workspaceId,
+    },
     include: {
       workspace: {
         include: {
@@ -17,7 +30,7 @@ export default async function Page() {
 
   const sitesForTable = sitesFromDb.map((site) => ({
     ...site,
-    owner: site.workspace?.owner,
+    owner: site.workspace?.owner || null, // Ensure owner is User | null, not undefined
   }));
 
   return (
