@@ -111,17 +111,9 @@ export async function scrapeAndAnalyzeWebsite(
           role: "system",
           content: `You are a website analyzer that extracts information to create a SiteConfig object. 
           Extract relevant information from the HTML and make reasonable assumptions for missing data based on the business type and location.
-          IMPORTANT: All text content must be in Norwegian (Bokmål).
+          IMPORTANT! The language of the config should be the same as the website.
           Use this subdomain: "${subdomain}"
-          
-          Guidelines for Norwegian content:
-          - Use professional Norwegian business language
-          - Use Norwegian currency format (NOK/kr)
-          - Use Norwegian date/time formats
-          - Use Norwegian phone number format (+47)
-          - Use Norwegian address formats
-          - Default working hours should be "Man-Fre: 07:00-16:00" if not specified
-          - Make assumptions that align with Norwegian business practices`,
+          `,
         },
         {
           role: "user",

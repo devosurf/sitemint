@@ -62,7 +62,7 @@ export async function deploySiteToVercel(siteId: string) {
     console.log(`✅ GitHub repository already exists: ${repoHtmlUrl}`);
   } catch (error: unknown) {
     if (typeof error === "object" && error !== null && "status" in error) {
-      const httpError = error as { status: number; [key: string]: unknown };
+      const httpError = error as { status: number;[key: string]: unknown };
       if (httpError.status === 404) {
         console.log(
           `ℹ️ GitHub repository not found. Creating from template "${GH_TEMPLATE_REPO}"...`

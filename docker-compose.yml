@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: sitemint_user
+      POSTGRES_PASSWORD: sitemint_pass
+      POSTGRES_DB: sitemint_db
+    ports:
+      - "5432:5432"
+

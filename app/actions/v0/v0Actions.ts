@@ -2,7 +2,7 @@
 
 import { generateText } from "ai";
 import { vercel } from "@ai-sdk/vercel";
-import { scrapeAndAnalyzeWebsite } from "app/actions/scraper/scraperActions";
+import { scrapeAndAnalyzeWebsite } from "../scraper/scraperActions"; // Assuming this function is defined in scraperActions.ts
 
 // Interface for function parameters (for clarity, TypeScript specific)
 // interface GenerateV0TextParams {

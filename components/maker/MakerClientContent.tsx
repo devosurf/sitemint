@@ -30,29 +30,27 @@ function generateEmailContent(
   site: SiteConfig,
   recipient: RecipientInfo
 ): string {
-  return `Hei ${recipient.name}${recipient.title ? `, ${recipient.title}` : ""}!
+  return `Hej ${recipient.name}${recipient.title ? `, ${recipient.title}` : ""}!
 
-Jeg har gleden av å informere deg om at vi har laget en demo-nettside for ${
-    site.name
-  }. Vi har hentet inspirasjon fra deres nåværende nettsted og lagt til moderne funksjoner og design.
+Jag har glädjen att informera dig om att vi har skapat en demo-webbsida för ${site.name}. Vi har hämtat inspiration från er nuvarande webbplats och lagt till moderna funktioner och design.
 
-Hovedpunkter fra demo-nettsiden:
-• Responsivt design som fungerer perfekt på alle enheter
-• Moderne og profesjonelt utseende
-• Optimalisert for søkemotorer (SEO)
-• Rask lastetid og god ytelse
-• Integrert kontaktskjema
-• Oversiktlig presentasjon av tjenester
-${site.socialMedia ? "• Integrerte sosiale medier-lenker" : ""}
+Huvudpunkter från demo-webbsidan:
+• Responsiv design som fungerar perfekt på alla enheter
+• Modernt och professionellt utseende
+• Optimerad för sökmotorer (SEO)
+• Snabb laddningstid och god prestanda
+• Integrerat kontaktformulär
+• Överskådlig presentation av tjänster
+${site.socialMedia ? "• Integrerade sociala medier-länkar" : ""}
 
-Du kan se demo-nettsiden på følgende lenke:
+Du kan se demo-webbsidan på följande länk:
 https://${site.subdomain}.codenord.no
 
-Jeg vil gjerne høre dine tanker om nettsiden. Vi kan enkelt gjøre tilpasninger basert på dine ønsker og behov.
+Jag skulle gärna höra dina tankar om webbsidan. Vi kan enkelt göra anpassningar baserat på dina önskemål och behov.
 
-Ta gjerne kontakt hvis du har spørsmål eller ønsker å diskutere mulighetene videre.
+Ta gärna kontakt om du har frågor eller vill diskutera möjligheterna vidare.
 
-Med vennlig hilsen
+Med vänliga hälsningar
 CodeNord
 Telefon: +47 400 85 185
 E-post: post@codenord.no`;
