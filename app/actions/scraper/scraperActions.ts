@@ -149,6 +149,7 @@ export async function scrapeAndAnalyzeWebsite(
       console.log(
         `✅ Incremented promptUsageCount for workspace: ${workspaceId}`
       );
+
     } catch (dbError) {
       console.error(
         `❌ Error updating promptUsageCount for workspace ${workspaceId}:`,
